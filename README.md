@@ -92,7 +92,7 @@ Example:
 
 Clone the repository:
 
-git clone <your-github-repository-url>
+git clone <url>
 
 Move into the project:
 
