@@ -29,7 +29,7 @@ The current version focuses on the basic CRUD foundation, including connecting t
 wanderlust
 Listings
 
-Currently implemented:
+##Currently implemented:
 
 View all listings
 View a single listing
@@ -44,7 +44,7 @@ GET	/listings/new	Display create-listing form
 POST	/listings	Create and save a new listing
 GET	/listings/:id	Display a single listimg
 
-
+---
 📁 Project Structure
 Wanderlust/
 │
@@ -63,7 +63,7 @@ Wanderlust/
 │
 └── node_modules/
 
-
+---
 🗄️ Listing Model
 
 Each listing currently contains:
@@ -86,7 +86,7 @@ Example:
     country: "India"
 }
 
-
+---
 
 ⚙️ Installation
 
@@ -101,6 +101,8 @@ cd Wanderlust
 Install dependencies:
 
 npm install
+---
+
 🗄️ MongoDB Setup
 
 The application currently connects to a local MongoDB database:
@@ -137,6 +139,11 @@ POST /listings
 The listing is then saved to MongoDB and the application redirects to:
 
 /listings
+
+----
+
+
+
 🔄 Current Application Flow
 Browser
    │
@@ -165,10 +172,11 @@ Express.js
            ▼
        MongoDB
 🛠️ Development
-
+------
 Nodemon is used during development so that the server automatically restarts whenever files are changed.
 
 nodemon app.js
+-----
 📌 Future Improvements
 
 Planned features include:
@@ -185,13 +193,14 @@ Planned features include:
  Add booking functionality
  Deploy the application
 
-
+-----
 👨‍💻 Author
 
 Priya Wankhade
-
+------
 
 
 📄 License
 
 This project is currently for learning and development purposes.
+----
