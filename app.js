@@ -42,12 +42,27 @@ app.get("/listing", async (req, res) => {
   const allListing = await Listing.find({});
   res.render("listings/index", { allListing });
 });
+//new route
+// New route - show the form
+app.get("/listings/new", (req, res) => {
+  res.render("listings/new");
+});
 //show route
 app.get("/listings/:id", async (req, res) => {
   let { id } = req.params;
   const listing = await Listing.findById(id);
   res.render("listings/show", { listing });
 });
+
+//create
+app.post("/listings",async(req,res)=>{
+  // let {title,descrption,image,price,country,location}=req.//body;
+  const newListing= new Listing (req.body.Listing);
+ 
+await newListing.save();
+res.redirect("/listing");
+
+})
 
 app.listen(8080, () => {
   console.log("Server is listening on port 8080");
