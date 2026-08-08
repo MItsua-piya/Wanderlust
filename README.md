@@ -1,206 +1,175 @@
-# Wanderlust 
+# Wanderlust 🌍
 
-Wanderlust is a full-stack web application for creating and viewing travel listings.  
-The project is being built using Node.js, Express, MongoDB, Mongoose, and EJS.
-
-The current version focuses on the basic CRUD foundation, including connecting the application to MongoDB, displaying listings, viewing individual listings, and creating new listings.
+A full-stack home rental platform inspired by Airbnb, built with Node.js, Express.js, MongoDB, Mongoose, and EJS. The application allows users to create, view, edit, and delete property listings, demonstrating complete RESTful routing, database integration, and server-side rendering.
 
 ---
 
-## Tech Stack
+## 🚀 Live Demo
 
-- Node.js- JavaScript runtime
-- Express.js- Backend web framework
-- MongoDB- Database
-- Mongoose - MongoDB object modeling
-- EJS - Server-side templating engine
-- HTML & CSS - Frontend
-- Nodemon - Development server auto-restart
+> Deployment in progress — coming soon on Render + MongoDB Atlas
 
 ---
 
-##  Features Implemented
+## 🛠️ Tech Stack
 
-### Database Connection
-- Connected Express application to MongoDB using Mongoose.
-- Database used:
-
-```text
-wanderlust
-Listings
-
-##Currently implemented:
-
-View all listings
-View a single listing
-Create a new listing
-Store listings in MongoDB
-Render pages using EJS
-Current Routes
-Method	Route	Purpose
-GET	/	Home page
-GET	/listings	Display all listings
-GET	/listings/new	Display create-listing form
-POST	/listings	Create and save a new listing
-GET	/listings/:id	Display a single listimg
+| Layer | Technology |
+|-------|-----------|
+| Runtime | Node.js |
+| Framework | Express.js |
+| Database | MongoDB + Mongoose |
+| Templating | EJS |
+| Styling | HTML5 + CSS3 |
+| Dev Tools | Nodemon |
 
 ---
-📁 Project Structure
+
+## ✅ Features Implemented
+
+### Core CRUD
+- View all listings
+- View a single listing in detail
+- Create a new listing
+- Edit an existing listing
+- Delete a listing
+
+### Database
+- Connected Express application to MongoDB using Mongoose
+- Persistent storage of all listing data
+
+### Routing
+- Full RESTful route structure following REST conventions
+- Server-side rendering with EJS templates
+
+---
+
+## 📌 Current Routes
+
+| Method | Route | Purpose |
+|--------|-------|---------|
+| GET | / | Home page |
+| GET | /listings | Display all listings |
+| GET | /listings/new | Display create listing form |
+| POST | /listings | Create and save new listing |
+| GET | /listings/:id | Display single listing |
+| GET | /listings/:id/edit | Display edit listing form |
+| PUT | /listings/:id | Update existing listing |
+| DELETE | /listings/:id | Delete a listing |
+
+---
+
+## 🗄️ Listing Schema
+
+```javascript
+{
+  title: String,        // required
+  description: String,  // required
+  image: String,        // URL
+  price: Number,        // per night
+  location: String,     // city/area
+  country: String       // country
+}
+```
+
+---
+
+## 📁 Project Structure
+
+```
 Wanderlust/
 │
-├── app.js
+├── app.js                  # Main application entry point
 ├── package.json
 ├── package-lock.json
+├── .gitignore
 │
 ├── models/
-│   └── listing.js
+│   └── listing.js          # Mongoose listing schema
 │
 ├── views/
 │   └── listings/
-│       ├── index.ejs
-│       ├── new.ejs
-│       └── show.ejs
+│       ├── index.ejs       # All listings
+│       ├── new.ejs         # Create listing form
+│       ├── show.ejs        # Single listing view
+│       └── edit.ejs        # Edit listing form
 │
-└── node_modules/
-
----
-🗄️ Listing Model
-
-Each listing currently contains:
-
-title
-description
-image
-price
-location
-country
-
-Example:
-
-{
-    title: "My New Villa",
-    description: "By the beach",
-    image: "image-url",
-    price: 1200,
-    location: "Calangute, Goa",
-    country: "India"
-}
+└── public/
+    └── css/
+        └── style.css       # Custom styles
+```
 
 ---
 
-⚙️ Installation
+## ⚙️ Installation
 
-Clone the repository:
-
-git clone <url>
-
-Move into the project:
-
+**Clone the repository:**
+```bash
+git clone https://github.com/MItsua-piya/Wanderlust.git
 cd Wanderlust
+```
 
-Install dependencies:
-
+**Install dependencies:**
+```bash
 npm install
+```
+
+**Start MongoDB locally:**
+```bash
+mongod
+```
+
+**Run the development server:**
+```bash
+nodemon app.js
+```
+
+**Open in browser:**
+```
+http://localhost:8080
+```
+
 ---
 
-🗄️ MongoDB Setup
+## 🔄 Application Flow
 
-The application currently connects to a local MongoDB database:
-
-mongodb://127.0.0.1:27017/wanderlust
-
-Make sure MongoDB is running before starting the application.
-
-▶️ Running the Application
-
-Start the development server with:
-
-nodemon app.js
-
-Or, if Nodemon is configured in package.json:
-
-npm run dev
-
-The application runs on:
-
-http://localhost:8080
-📝 Creating a Listing
-
-Navigate to:
-
-http://localhost:8080/listings/new
-
-Fill in the listing details and submit the form.
-
-The form sends a POST request to:
-
-POST /listings
-
-The listing is then saved to MongoDB and the application redirects to:
-
-/listings
-
-----
-
-
-
-🔄 Current Application Flow
+```
 Browser
    │
    ▼
-Express.js
+Express.js Router
    │
-   ├── GET /listings
-   │       │
-   │       ▼
-   │    Mongoose
-   │       │
-   │       ▼
-   │    MongoDB
-   │       │
-   │       ▼
-   │    EJS View
-   │
-   └── POST /listings
-           │
-           ▼
-       req.body
-           │
-           ▼
-       Mongoose
-           │
-           ▼
-       MongoDB
-🛠️ Development
-------
-Nodemon is used during development so that the server automatically restarts whenever files are changed.
+   ├── GET  /listings     → Fetch all → Mongoose → MongoDB → EJS render
+   ├── POST /listings     → req.body  → Mongoose → MongoDB → redirect
+   ├── PUT  /listings/:id → req.body  → Mongoose → MongoDB → redirect
+   └── DELETE /listings/:id           → Mongoose → MongoDB → redirect
+```
 
-nodemon app.js
------
-📌 Future Improvements
+---
 
-Planned features include:
+## 🔮 Upcoming Features
 
- Edit listings
- Delete listings
- Add proper styling
- Add navigation bar
- Add responsive design
- Add validation
- Add error handling
- Add user authentication
- Add reviews
- Add booking functionality
- Deploy the application
+- [ ] Input validation with Joi
+- [ ] Error handling middleware
+- [ ] MongoDB Atlas migration
+- [ ] User authentication (Passport.js + JWT)
+- [ ] Session management
+- [ ] Reviews and ratings system
+- [ ] Search and filter by location/price
+- [ ] Image upload with Cloudinary
+- [ ] Map integration with Leaflet.js
+- [ ] Booking system with date availability
+- [ ] Full deployment on Render
 
------
-👨‍💻 Author
+---
 
-Priya Wankhade
-------
+## 👩‍💻 Author
 
+**Priya Wankhade**
+- GitHub: [@MItsua-piya](https://github.com/MItsua-piya)
+- LinkedIn: [priya-wankhade](https://linkedin.com/in/priya-wankhade-338a67331)
+- Email: priyawankhade0314@gmail.com
 
-📄 License
+---
 
-This project is currently for learning and development purposes.
-----
+## 📄 License
+
+This project is for learning and development purposes.
