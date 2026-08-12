@@ -1,17 +1,17 @@
 <%layout("layouts/boilerplate")%>
 
 <div class="row mt-3">
-
   <div class="col-8 offset-2">
-      <h3 >Create New Listing</h3>
-    <br>
-    <form method="POST" action="/listings">
+    <h3>Create New Listing</h3>
+    <br />
+    <form method="POST" action="/listings" novalidate class="needs-validation">
       <div class="mb-3">
         <label for="title" class="form-label">Title</label>
         <input
           name="Listing[title]"
           placeholder="Enter title"
           class="form-control"
+          required
         />
       </div>
 
@@ -21,16 +21,17 @@
           name="Listing[description]"
           placeholder="Enter description"
           class="form-control"
+          required
         ></textarea>
       </div>
-              <div class="mb-3">
-          <label for="image" class="form-label">image</label>
-          <input
-            name="Listing[image]"
-            placeholder="Enter image"
-            class="form-control"
-          />
-        </div>
+      <div class="mb-3">
+        <label for="image" class="form-label">image</label>
+        <input
+          name="Listing[image]"
+          placeholder="Enter image"
+          class="form-control"
+        />
+      </div>
       <div class="row">
         <div class="mb-3 col-md-4">
           <label for="price" class="form-label">price</label>
@@ -38,19 +39,20 @@
             name="Listing[price]"
             placeholder="Enter price"
             class="form-control"
+            required
           />
         </div>
 
-  <div class="mb-3 col-md-8">
-        <label for="country" class="form-label">country</label>
-        <input
-          name="Listing[country]"
-          placeholder="Enter country"
-          class="form-control"
-        />
+        <div class="mb-3 col-md-8">
+          <label for="country" class="form-label">country</label>
+          <input
+            name="Listing[country]"
+            placeholder="Enter country"
+            class="form-control"
+            required
+          />
+        </div>
       </div>
-      </div>
-    
 
       <div class="mb-3">
         <label for="location" class="form-label">location</label>
@@ -58,11 +60,12 @@
           name="Listing[location]"
           placeholder="Enter location"
           class="form-control"
+          required
         />
       </div>
 
       <button type="submit" class="btn btn-dark add-btn mt-3">Add</button>
-      <br>
+      <br />
     </form>
   </div>
 </div>
