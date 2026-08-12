@@ -60,12 +60,15 @@ app.get("/listings/:id", async (req, res) => {
 });
 
 //create
-app.post("/listings", async (req, res) => {
-  // let {title,descrption,image,price,country,location}=req.//body;
-  const newListing = new Listing(req.body.Listing);
+app.post("/listings", async (req, res, next) => {
+  try {
+    const newListing = new Listing(req.body.Listing);
 
-  await newListing.save();
-  res.redirect("/listings");
+    await newListing.save();
+    res.redirect("/listings");
+  } catch (err) {
+    next(err);
+  }
 });
 //edit route
 app.get("/listings/:id/edit", async (req, res) => {
@@ -86,6 +89,10 @@ app.delete("/listings/:id", async (req, res) => {
   console.log(deletedListing);
   res.redirect("/listings");
 });
+app.use((err, req, res, next) => {
+  res.send("something went wrong");
+});
+
 app.listen(8080, () => {
   console.log("Server is listening on port 8080");
 });
