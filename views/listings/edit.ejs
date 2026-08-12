@@ -4,7 +4,12 @@
   <div class="col-8 offset-2">
     <h3>Edit this listing</h3>
     <br />
-    <form method="POST" action="/listings/<%=listing._id%>?_method=PUT">
+    <form
+      method="POST"
+      action="/listings/<%=listing._id%>?_method=PUT"
+      novalidate
+      class="needs-validation"
+    >
       <div class="mb-3">
         <label for="title" class="form-label">Title</label>
         <input
@@ -12,7 +17,9 @@
           name="Listing[title]"
           value="<%= listing.title %>"
           class="form-control"
+          required
         />
+        <div class="valid-feedback">Title Looks Good</div>
       </div>
 
       <div class="mb-3">
@@ -21,9 +28,11 @@
           id="description"
           name="Listing[description]"
           class="form-control"
+          required
         >
 <%= listing.description %></textarea
         >
+        <div class="valid-feedback">Description Looks Good</div>
       </div>
 
       <div class="mb-3">
@@ -33,7 +42,9 @@
           name="Listing[image]"
           value="<%= listing.image %>"
           class="form-control"
+          required
         />
+        <div class="invalid-feedback">Please enter valid link for image</div>
       </div>
 
       <div class="row">
@@ -44,7 +55,9 @@
             name="Listing[price]"
             value="<%= listing.price %>"
             class="form-control"
+            required
           />
+          <div class="invalid-feedback">please enter valid price</div>
         </div>
 
         <div class="mb-3 col-md-8">
@@ -54,7 +67,9 @@
             name="Listing[country]"
             value="<%= listing.country %>"
             class="form-control"
+            required
           />
+          <div class="invalid-feedback">please enter valid country</div>
         </div>
       </div>
 
@@ -65,11 +80,13 @@
           name="Listing[location]"
           value="<%= listing.location %>"
           class="form-control"
+          required
         />
+        <div class="invalid-feedback">please enter valid location</div>
       </div>
 
       <button type="submit" class="btn btn-dark edit-btn mt-3">Edit</button>
-  
     </form>
   </div>
 </div>
+<script src="/js/script.js"></script>
