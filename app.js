@@ -8,7 +8,7 @@ const wrapAsync = require("./utils/wrapAsycn.js");
 const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
 const path = require("path");
 const ExpressError = require("./utils/ExpressError.js");
-
+const { listingSchema } = require("./schema.js");
 main()
   .then(() => {
     console.log("Connected to DB");
@@ -21,18 +21,6 @@ async function main() {
   await mongoose.connect(MONGO_URL);
 }
 
-// app.get("/testListing",async (req,res)=>{
-//     let samplelisting =new Listing ({
-//         title:"My new Villa",
-//         description:"By the beach",
-//         price:1200,
-//         location:"Calangute ,Goa",
-//         country:"India",
-//     });
-//     await samplelisting.save();
-//     console.log("Sample was saved");
-//     res.send("successful");
-// })
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
@@ -43,7 +31,15 @@ app.use(express.static(path.join(__dirname, "/public")));
 app.get("/", (req, res) => {
   res.send("Hi, I am Groot");
 });
+const validateListing = (req, res, next) => {
+  let { error } = listingSchema.validate(req.body);
 
+  if (error) {let errMsg=error.details.map((el)=>el.message).join(",");
+    throw new ExpressError(400, errMsg);
+  } else {
+    next();
+  }
+};
 //Index Route
 app.get(
   "/listings",
@@ -70,23 +66,10 @@ app.get(
 //create
 app.post(
   "/listings",
+  validateListing,
   wrapAsync(async (req, res, next) => {
-    if (!req.body.Listing) {
-      throw new ExpressError(400, "Send Valid Data For Listing");
-    }
     const newListing = new Listing(req.body.Listing);
-    if (!newListing.description) {
-      throw new ExpressError(400, "Description is missing");
-    }
-    if (!newListing.title) {
-      throw new ExpressError(400, "Title is missing");
-    }
-    if (!newListing.price) {
-      throw new ExpressError(400, "Price is missing");
-    }
-    if (!newListing.location) {
-      throw new ExpressError(400, "Location is missing");
-    }
+
     await newListing.save();
     res.redirect("/listings");
   }),
@@ -103,6 +86,7 @@ app.get(
 //update Route
 app.put(
   "/listings/:id",
+  validateListing,
   wrapAsync(async (req, res) => {
     let { id } = req.params;
     await Listing.findByIdAndUpdate(id, { ...req.body.Listing });
