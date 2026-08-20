@@ -71,7 +71,7 @@ app.get(
   "/listings/:id",
   wrapAsync(async (req, res) => {
     let { id } = req.params;
-    const listing = await Listing.findById(id);
+    const listing = await Listing.findById(id).populate("reviews");
     res.render("listings/show", { listing });
   }),
 );
@@ -121,7 +121,7 @@ app.delete(
 //post route
 app.post(
   "/listings/:id/reviews",
-  reviewSchema,
+  validateReview ,
   wrapAsync(async (req, res) => {
     let listing = await Listing.findById(req.params.id);
     let newReview = new Review(req.body.review);
