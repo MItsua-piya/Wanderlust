@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const Listing = require("./models/listing.js");
+const Review = require("./models/review.js");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsycn.js");
@@ -103,6 +104,16 @@ app.delete(
     res.redirect("/listings");
   }),
 );
+// reviews
+//post route
+app.post("/listings/:id/reviews",async (req,res)=>{
+let listing=await Listing.findById(req.params.id);
+let newReview= new Review(req.body.review);
+listing.reviews.push(newReview);
+await newReview.save();
+await listing.save();
+res.redirect(`/listings/${listing._id}`);
+});
 app.all("/{*splat}", (req, res, next) => {
   next(new ExpressError(404, "Page Not Found !"));
 });
