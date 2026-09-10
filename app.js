@@ -8,7 +8,7 @@ const listings=require("./routes/listing.js");
 const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
 const path = require("path");
 const ExpressError = require("./utils/ExpressError.js");
-
+const reviews = require("./routes/review.js");
 main()
   .then(() => {
     console.log("Connected to DB");
@@ -33,7 +33,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/",listings);
-
+app.use("/listings/:id/reviews", reviews);
 app.all("/{*splat}", (req, res, next) => {
   next(new ExpressError(404, "Page Not Found !"));
 });
