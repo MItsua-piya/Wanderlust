@@ -8,6 +8,8 @@ const listings=require("./routes/listing.js");
 const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
 const path = require("path");
 const ExpressError = require("./utils/ExpressError.js");
+
+const session = require("express-session");
 const reviews = require("./routes/review.js");
 main()
   .then(() => {
@@ -27,7 +29,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "/public")));
-
+const sessionOptions={
+  secret:"mysupersecretcode",
+  resave:false,
+  saveUninitialized:true
+};
+app.use(session(sessionOptions));
 app.get("/", (req, res) => {
   res.send("Hi, I am Groot");
 });
