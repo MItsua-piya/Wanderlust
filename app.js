@@ -34,7 +34,7 @@ const sessionOptions={
   resave:false,
   saveUninitialized:true
 };
-
+app.use(session(sessionOptions));
 app.get("/", (req, res) => {
   res.send("Hi, I am Groot");
 });
