@@ -10,6 +10,7 @@ const path = require("path");
 const ExpressError = require("./utils/ExpressError.js");
 
 const session = require("express-session");
+const flash =require("connect-flash");
 const reviews = require("./routes/review.js");
 main()
   .then(() => {
@@ -40,10 +41,16 @@ const sessionOptions={
     httpOnly:true,
   }
 };
-
-app.use(session(sessionOptions));
 app.get("/", (req, res) => {
   res.send("Hi, I am Groot");
+});
+
+app.use(session(sessionOptions));
+app.use(flash());
+
+app.use((req,res,next)=>{
+  res.locals.success=req.flash("sucess");
+  next();
 });
 
 app.use("/",listings);
