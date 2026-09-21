@@ -11,6 +11,11 @@ const ExpressError = require("./utils/ExpressError.js");
 
 const session = require("express-session");
 const flash = require("connect-flash");
+//passport requirements
+const passport =require("passport");
+const localStrategy=require("passport-local");
+const User=require("./models/user.js");
+
 const reviews = require("./routes/review.js");
 main()
   .then(() => {
@@ -47,6 +52,9 @@ app.get("/", (req, res) => {
 
 app.use(session(sessionOptions));
 app.use(flash());
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use((req,res,next)=>{
   res.locals.success=req.flash("success");
