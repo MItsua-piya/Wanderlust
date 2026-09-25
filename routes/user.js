@@ -14,10 +14,10 @@ const usersController = require("../controllers/users.js");
 
 router
   .route("/signup")
-  .get("/signup", (req, res) => {
+  .get( (req, res) => {
     res.render("users/signup.ejs");
   })
-  .post("/signup", wrapAsync(usersController.signup));
+  .post( wrapAsync(usersController.signup));
 
 router
   .route("login")
