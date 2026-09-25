@@ -5,7 +5,7 @@ const { listingSchema, reviewSchema } = require("../schema.js");
 const ExpressError = require("../utils/ExpressError.js");
 const wrapAsync = require("../utils/wrapAsycn.js");
 const Listing = require("../models/listing.js");
-const { isLoggedIn ,isOwner} = require("../middleware.js");
+const { isLoggedIn, isOwner } = require("../middleware.js");
 
 const validateListing = (req, res, next) => {
   let { error } = listingSchema.validate(req.body);
@@ -39,14 +39,19 @@ router.get(
     let { id } = req.params;
 
     const listing = await Listing.findById(id)
-      .populate("reviews")
+      .populate({
+        path: "reviews",
+        populate: {
+          path: "author",
+        },
+      })
       .populate("owner");
 
     if (!listing) {
       req.flash("error", "Listing you requested for does not exsit");
       return res.redirect("/listings");
     }
-console.log(listing);
+    console.log(listing);
     res.render("listings/show", { listing });
   }),
 );
@@ -72,7 +77,8 @@ router.post(
 // edit route
 router.get(
   "/listings/:id/edit",
-  isLoggedIn,isOwner,
+  isLoggedIn,
+  isOwner,
   wrapAsync(async (req, res) => {
     let { id } = req.params;
 
@@ -93,10 +99,11 @@ router.get(
 // update route
 router.put(
   "/listings/:id",
-  isLoggedIn,isOwner,
+  isLoggedIn,
+  isOwner,
   validateListing,
   wrapAsync(async (req, res) => {
-  let { id }=req.params;
+    let { id } = req.params;
     await Listing.findByIdAndUpdate(id, {
       ...req.body.listing,
     });
@@ -109,7 +116,8 @@ router.put(
 // delete route
 router.delete(
   "/listings/:id",
-  isLoggedIn,isOwner,
+  isLoggedIn,
+  isOwner,
   wrapAsync(async (req, res) => {
     let { id } = req.params;
 
