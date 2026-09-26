@@ -14,13 +14,13 @@ const usersController = require("../controllers/users.js");
 
 router
   .route("/signup")
-  .get( (req, res) => {
+  .get((req, res) => {
     res.render("users/signup.ejs");
   })
-  .post( wrapAsync(usersController.signup));
+  .post(wrapAsync(usersController.signup));
 
 router
-  .route("login")
+  .route("/login")
   .get(usersController.renderLoginForm)
   .post(
     saveRedirectUrl,
