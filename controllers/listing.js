@@ -30,8 +30,14 @@ module.exports.showListing = async (req, res) => {
 module.exports.createListing = async (req, res) => {
   const newListing = new Listing(req.body.listing);
 
-  // Store the logged-in user's ID as the owner
   newListing.owner = req.user._id;
+
+  if (req.file) {
+    newListing.image = {
+      url: req.file.path,
+      filename: req.file.filename,
+    };
+  }
 
   await newListing.save();
 
