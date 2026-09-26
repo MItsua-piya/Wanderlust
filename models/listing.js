@@ -7,15 +7,21 @@ const listingSchema = new Schema({
     required: true,
   },
   description: String,
-  image: {
+image: {
+  filename: {
+    type: String,
+    default: "listingimage",
+  },
+  url: {
     type: String,
     default:
-      "https://unsplash.com/photos/silhouette-of-tree-during-golden-hour-bKbJaRWKuHs",
+      "https://images.unsplash.com/photo-1554043327-5d5c46c3bb3b?auto=format&fit=crop&w=800&q=60",
     set: (v) =>
       v === ""
-        ? "https://unsplash.com/photos/silhouette-of-tree-during-golden-hour-bKbJaRWKuHs"
+        ? "https://images.unsplash.com/photo-1554043327-5d5c46c3bb3b?auto=format&fit=crop&w=800&q=60"
         : v,
   },
+},
   price: Number,
   location: String,
   country: String,
