@@ -20,8 +20,9 @@
       
         <p class="card-text">  
         <%=listing.description%> </p>
-        <p class="card-text">₹<%= listing.price ? listing.price.toLocaleString("en-IN") : "N/A" %></p>
-        <p class="card-text"><%=listing.location%></p>
+        <p class="card-text">Catergory: <%=listing.category%></p>
+        <p class="card-text">Price: ₹<%= listing.price ? listing.price.toLocaleString("en-IN") : "N/A" %></p>
+        <p class="card-text">Location: <%=listing.location%></p>
         <p class="card-text"><%=listing.country%></p>
       
     </div>
