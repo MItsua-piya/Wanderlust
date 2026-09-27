@@ -1,23 +1,32 @@
 <%layout("layouts/boilerplate")%>
 <style>
- #filters{
-  display:flex;
-  flex-wrap:wrap;
- }
- .filter{
+#filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.filter {
   text-align: center;
   margin-right: 2rem;
   margin-top: 2rem;
   opacity: 0.7;
- }
-  .filter:hover{
-opacity: 1;
-cursor:pointer;
+  cursor: pointer;
+  color: black;
+  text-decoration: none;
+  width: auto;
+  flex: 0 0 auto;
+}
 
- }
+.filter:hover {
+  opacity: 1;}
  .filter i {
   color: black !important;
   font-size: 1.35rem;
+}
+ .filter p {
+ 
+  font-size:0.8rem;
 }
 
 </style>
@@ -25,43 +34,54 @@ cursor:pointer;
 
 <div id="filters">
 
-  <div class="filter">
-    <div><i class="fa-solid fa-fire"></i></div>
-    <p>Trending</p>
-  </div>
-
-  <div class="filter">
-    <div><i class="fa-solid fa-hotel"></i></div>
-    <p>Rooms</p>
-  </div>
-  <div class="filter">
-    <div><i class="fa-solid fa-mountain-city"></i></div>
+  <a href="/listings?category=Iconic%20Cities" class="filter">
+    <div>
+      <i class="fa-solid fa-mountain-city"></i>
+    </div>
     <p>Iconic Cities</p>
-  </div>
-  <div class="filter">
-    <div><i class="fa-solid fa-mountain"></i></div>
+  </a>
+
+  <a href="/listings?category=Mountains" class="filter">
+    <div>
+      <i class="fa-solid fa-mountain"></i>
+    </div>
     <p>Mountains</p>
-  </div>
-  <div class="filter">
-    <div><i class="fa-brands fa-fort-awesome"></i></div>
+  </a>
+
+  <a href="/listings?category=Castles" class="filter">
+    <div>
+      <i class="fa-brands fa-fort-awesome-alt"></i>
+    </div>
     <p>Castles</p>
-  </div>
-   <div class="filter">
-    <div><i class="fa-solid fa-person-swimming"></i></div>
+  </a>
+
+  <a href="/listings?category=Amazing%20Pools" class="filter">
+    <div>
+      <i class="fa-solid fa-water"></i>
+    </div>
     <p>Amazing Pools</p>
-  </div>
-    <div class="filter">
-    <div><i class="fa-solid fa-tents"></i></div>
+  </a>
+
+  <a href="/listings?category=Camping" class="filter">
+    <div>
+      <i class="fa-solid fa-campground"></i>
+    </div>
     <p>Camping</p>
-  </div>
-  <div class="filter">
-    <div><i class="fa-solid fa-cow"></i>i></div>
+  </a>
+
+  <a href="/listings?category=Farms" class="filter">
+    <div>
+      <i class="fa-solid fa-tractor"></i>
+    </div>
     <p>Farms</p>
-  </div>
-   <div class="filter">
-    <div><i class="fa-solid fa-igloo"></i></div>
+  </a>
+
+  <a href="/listings?category=Arctic" class="filter">
+    <div>
+      <i class="fa-solid fa-igloo"></i>
+    </div>
     <p>Arctic</p>
-  </div>
+  </a>
 
 </div>
 
