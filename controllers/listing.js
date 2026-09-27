@@ -59,7 +59,32 @@ module.exports.createListing = async (req, res, next) => {
   req.flash("success", "New Listing Created!");
   res.redirect("/listings");
 };
+module.exports.searchListings = async (req, res) => {
+  let { q } = req.query;
 
+  if (!q || q.trim() === "") {
+    req.flash("error", "Please enter a destination to search");
+    return res.redirect("/listings");
+  }
+
+  const regex = new RegExp(q, "i");
+
+  const allListing = await Listing.find({
+    $or: [
+      { location: regex },
+      { country: regex },
+      { title: regex },
+      { category: regex },
+    ],
+  });
+
+  if (allListing.length === 0) {
+    req.flash("error", `No listings found for "${q}"`);
+    return res.redirect("/listings");
+  }
+
+  res.render("listings/index.ejs", { allListing });
+};
 module.exports.RenderEditForm = async (req, res) => {
   let { id } = req.params;
 

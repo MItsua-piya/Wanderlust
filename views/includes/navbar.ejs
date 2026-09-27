@@ -1,3 +1,45 @@
+<style>
+ 
+.search-input {
+  border-radius: 2rem 0 0 2rem;
+  border: 1px solid #dcdcdc;
+  padding: 0.6rem 1.2rem;
+  width: 280px;
+  outline: none;
+  box-shadow: none;
+}
+
+.search-input:focus {
+  border-color: #dcdcdc;
+  box-shadow: none;
+}
+
+.btn-search {
+  background-color: #fe424d;
+  color: white;
+  border-radius: 0 2rem 2rem 0;
+  padding: 0.6rem 1.5rem;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+}
+
+.btn-search:hover {
+  background-color: #e13840;
+  color: white;
+}
+
+.btn-search i {
+  font-size: 0.9rem;
+}
+
+form[role="search"] {
+  gap: 0;
+}
+</style>
+
 <nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
   <div class="container-fluid">
     <a class="navbar-brand" href="/listings"><i class="fa-brands fa-skyatlas"></i></a>
@@ -16,8 +58,26 @@
       
       </div>
          <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+         <% if (currentPath === "/listings" || currentPath === "/listings/search") { %>
+  <div class="navbar-nav ms-auto">
+    <form class="d-flex" role="search" action="/listings/search" method="GET">
+      <input
+        class="form-control search-input"
+        type="search"
+        name="q"
+        placeholder="Search Destination"
+        autocomplete="off"
+      />
+      <button class="btn btn-search" type="submit">
+        <i class="fa-solid fa-magnifying-glass"></i>Search
+      </button>
+    </form>
+  </div>
+<% } %>
+          
       <div class="navbar-nav ms-auto">
           <a class="nav-link" href="/listings/new">Wanderlust your home</a>
+          
         <%if(!currUser){%>
         <a class="nav-link" aria-current="page" href="/signup"><b>Sign Up</b></a>
         <a class="nav-link" href="/login"><b>Log In</b></a>
