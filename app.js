@@ -3,6 +3,7 @@ if (process.env.NODE_ENV != "production") {
 }
 console.log(process.env.SECRET);
 const express = require("express");
+
 const app = express();
 const mongoose = require("mongoose");
 const Listing = require("./models/listing.js");
@@ -15,6 +16,7 @@ const path = require("path");
 const ExpressError = require("./utils/ExpressError.js");
 
 const session = require("express-session");
+const MongoStore = require("connect-mongo").default;
 const flash = require("connect-flash");
 //passport requirements
 const passport = require("passport");
@@ -42,7 +44,18 @@ app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "/public")));
 
+const store = MongoStore.create({
+  mongoUrl: dbUrl,
+  crypto: {
+    secret: "mysupersecretcode",
+  },
+  touchAfter: 24 * 3600,
+});
+store.on("error",()=>{
+  console.log("ERROR in MONGO SESSION STORE");
+});
 const sessionOptions = {
+  store,
   secret: "mysupersecretcode",
   resave: false,
   saveUninitialized: true,
