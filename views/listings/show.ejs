@@ -2,6 +2,7 @@
 <script>
   const mapToken= "<%=process.env.MAP_TOKEN%>";
   const coordinates=<%-JSON.stringify(listing.geometry.coordinates)%>;
+   const locationAt=<%-JSON.stringify(listing.location)%>;
 </script>
 <div class="row">
   <div class="col-8 offset-2">
