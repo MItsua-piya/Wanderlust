@@ -1,5 +1,6 @@
 const Review = require("../models/review");
 const Listing = require("../models/listing");
+const User = require("../models/user.js");
 
 module.exports.signup = async (req, res, next) => {
   try {
@@ -16,7 +17,7 @@ module.exports.signup = async (req, res, next) => {
         return next(err);
       }
 
-      req.flash("success", "Welcome to Wanderlust");
+      req.flash("success", "Welcome to Voyago");
 
       let redirectUrl = res.locals.redirectUrl || "/listings";
       res.redirect(redirectUrl);
@@ -31,7 +32,7 @@ module.exports.renderLoginForm = (req, res) => {
   res.render("users/login.ejs");
 };
 module.exports.login = async (req, res) => {
-  req.flash("success", "Welcome back to Wanderlust!");
+  req.flash("success", "Welcome back to Voyago!");
 
   let redirectUrl = res.locals.redirectUrl || "/listings";
 
