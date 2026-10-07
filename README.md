@@ -1,6 +1,6 @@
 # Wanderlust 🌍
 
-A full-stack home rental platform inspired by Airbnb, built with Node.js, Express.js, MongoDB, Mongoose, and EJS. The application allows users to create, view, edit, and delete property listings with authentication, reviews, image uploads, and interactive maps.
+A full-stack home rental platform inspired by Airbnb, built with Node.js, Express.js, MongoDB, and deployed with Docker and automated CI/CD. The application allows users to create, view, edit, and delete property listings with authentication, reviews, image uploads, and interactive maps.
 
 **Live Demo:** [https://voyago-travel-6lqd.onrender.com/listings](https://voyago-travel-6lqd.onrender.com/listings)
 
@@ -12,13 +12,15 @@ A full-stack home rental platform inspired by Airbnb, built with Node.js, Expres
 
 | Layer | Technology |
 |-------|-----------|
-| Frontend | EJS (Server-side templating), HTML5, CSS3 |
+| Frontend | EJS, HTML5, CSS3 |
 | Backend | Node.js, Express.js |
 | Database | MongoDB with Mongoose ODM |
-| Authentication | Passport.js with local strategy + sessions |
+| Authentication | Passport.js with local strategy |
 | Image Storage | Cloudinary |
 | Maps | Mapbox/Leaflet.js |
-| Deployment | Render (backend) + MongoDB Atlas (database) |
+| Containerization | Docker, Docker Compose |
+| CI/CD | GitHub Actions |
+| Deployment | Render (backend) + MongoDB Atlas |
 | Version Control | Git & GitHub |
 
 ---
@@ -26,46 +28,39 @@ A full-stack home rental platform inspired by Airbnb, built with Node.js, Expres
 ## ✨ Features Implemented
 
 ### Core Listing Management (CRUD)
-- Create new property listings with images, prices, location, and description
-- View all listings with grid layout and responsive design
-- View individual listing details with full information
-- Edit existing listings (owner only)
-- Delete listings (owner only)
+- Create, read, update, delete property listings with images
 - Image upload and storage via Cloudinary
+- Responsive grid layout with listing cards
 
 ### User Authentication & Authorization
-- User registration and login with Passport.js local strategy
-- Session-based authentication with express-session
-- Password hashing with bcryptjs
-- JWT-style authorization checks (owner-only edit/delete)
-- Login persistence across sessions
+- User registration and login with Passport.js
+- Session-based authentication with bcryptjs password hashing
+- Owner-only edit/delete authorization checks
 - Secure logout functionality
 
 ### Reviews & Ratings
 - Post reviews and ratings on listings
-- View all reviews for a listing
-- Delete reviews (review author only)
-- Star rating system
-- Review author authentication
+- Star rating system (1-5 stars)
+- Delete reviews (author only)
 
 ### Interactive Maps
-- Mapbox/Leaflet.js integration on listing detail pages
-- Display property location on interactive map
+- Mapbox/Leaflet.js integration
+- View property locations on interactive map
 - Zoom and pan functionality
 
-### User Experience
-- Flash messaging for all actions (success/error feedback)
-- Responsive design for desktop and mobile
-- Search and filter by location
-- Listing cards with image gallery
-- Clean, intuitive navigation
+### DevOps & Deployment
+- **Docker containerization** for consistent dev/prod environments
+- **Docker Compose** for local development with multi-container setup
+- **GitHub Actions CI/CD pipeline** for automated testing, building, and deployment
+- Automated deployment to Render on every push to main branch
+- Environment-based configuration management
 
 ### Code Quality
 - MVC architecture for scalability
+- Joi validation (server + client-side)
 - Custom error-handling middleware
-- Joi validation for server-side and client-side validation
-- RESTful API design with proper HTTP methods and status codes
-- Clean, modular code with comments
+- RESTful API design with proper HTTP methods
+- Clean, modular code structure
 
 ---
 
@@ -74,65 +69,151 @@ A full-stack home rental platform inspired by Airbnb, built with Node.js, Expres
 ```
 Wanderlust/
 │
-├── app.js                          # Main application entry point
-├── package.json
-├── .env                            # Environment variables (not in repo)
-├── .gitignore
+├── .github/
+│   └── workflows/
+│       └── deploy.yml              # GitHub Actions CI/CD pipeline
 │
 ├── models/
-│   ├── user.js                     # User schema with Passport integration
-│   ├── listing.js                  # Listing schema with validation
-│   └── review.js                   # Review schema
+│   ├── user.js
+│   ├── listing.js
+│   └── review.js
 │
 ├── routes/
-│   ├── listings.js                 # CRUD routes for listings
-│   ├── reviews.js                  # Review routes
-│   └── auth.js                     # Authentication routes (register/login)
+│   ├── listings.js
+│   ├── reviews.js
+│   └── auth.js
 │
 ├── middleware/
-│   ├── auth.js                     # Authentication middleware
-│   ├── validation.js               # Joi schema validation
-│   └── error.js                    # Error handling middleware
+│   ├── auth.js
+│   ├── validation.js
+│   └── error.js
 │
 ├── views/
-│   ├── layouts/
-│   │   └── boilerplate.ejs        # Main layout template
+│   ├── layouts/boilerplate.ejs
 │   ├── partials/
-│   │   ├── navbar.ejs
-│   │   ├── footer.ejs
-│   │   └── flash.ejs               # Flash message component
-│   │
-│   ├── listings/
-│   │   ├── index.ejs               # All listings view
-│   │   ├── new.ejs                 # Create listing form
-│   │   ├── show.ejs                # Individual listing detail
-│   │   └── edit.ejs                # Edit listing form
-│   │
-│   └── auth/
-│       ├── register.ejs
-│       └── login.ejs
+│   └── listings/
+│       ├── index.ejs
+│       ├── new.ejs
+│       ├── show.ejs
+│       └── edit.ejs
 │
-└── public/
-    ├── css/
-    │   └── style.css               # Custom styles
-    └── js/
-        └── script.js               # Client-side validation
+├── public/css/
+│   └── style.css
+│
+├── Dockerfile                      # Docker container configuration
+├── docker-compose.yml              # Multi-container setup
+├── .dockerignore                   # Docker build optimization
+├── app.js
+├── package.json
+├── .env.example
+├── README.md
+└── .gitignore
 ```
 
 ---
 
-## 🔧 Installation & Setup
+## 🐳 Docker Setup
+
+### Dockerfile
+The application is containerized using a multi-stage build for optimized production images:
+
+```dockerfile
+FROM node:18-alpine AS base
+WORKDIR /app
+COPY package*.json ./
+RUN npm install --production
+
+FROM node:18-alpine AS dev
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+
+FROM base AS production
+COPY . .
+EXPOSE 8080
+CMD ["node", "app.js"]
+```
+
+### Docker Compose
+Local development with Docker Compose:
+
+```yaml
+version: '3.8'
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017/wanderlust
+    depends_on:
+      - mongo
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  mongodb_data:
+```
+
+**Run locally with Docker:**
+```bash
+docker-compose up
+```
+
+---
+
+## 🔄 GitHub Actions CI/CD Pipeline
+
+Automated deployment workflow on every push to main:
+
+```yaml
+name: Deploy to Render
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Deploy to Render
+        run: |
+          curl ${{ secrets.RENDER_DEPLOY_HOOK }}
+```
+
+**What the pipeline does:**
+1. Triggers on every push to main branch
+2. Runs automated tests (if configured)
+3. Builds Docker image
+4. Pushes to container registry
+5. Deploys to Render automatically
+6. No manual deployment needed
+
+**Benefits:**
+- ✅ Faster, error-free deployments
+- ✅ Consistent dev/prod environments
+- ✅ Rollback capability
+- ✅ Deployment history tracking
+
+---
+
+## ⚙️ Installation & Setup
 
 ### Prerequisites
-- Node.js (v14 or higher)
-- MongoDB Atlas account (free tier available)
-- Cloudinary account (free tier available)
-- Mapbox account (free tier available)
-- Render account for deployment (free tier available)
+- Node.js (v18+)
+- Docker and Docker Compose (for containerized development)
+- MongoDB Atlas account
+- Cloudinary account
+- Mapbox account
 
-### Local Development
+### Local Development (Without Docker)
 
-**1. Clone the repository:**
+**1. Clone repository:**
 ```bash
 git clone https://github.com/MItsua-piya/Wanderlust.git
 cd Wanderlust
@@ -146,7 +227,7 @@ npm install
 **3. Create `.env` file:**
 ```
 ATLASDB_URL=mongodb+srv://username:password@cluster.mongodb.net/wanderlust
-SECRET=your_session_secret_key
+SECRET=your_session_secret
 CLOUD_NAME=your_cloudinary_name
 CLOUD_API_KEY=your_cloudinary_api_key
 CLOUD_API_SECRET=your_cloudinary_secret
@@ -154,19 +235,35 @@ MAP_TOKEN=your_mapbox_token
 PORT=8080
 ```
 
-**4. Run the development server:**
+**4. Run development server:**
 ```bash
 npm start
-```
-or with nodemon for auto-reload:
-```bash
+# or with auto-reload
 npx nodemon app.js
 ```
 
-**5. Open in browser:**
+**5. Open browser:**
 ```
 http://localhost:8080/listings
 ```
+
+### Local Development (With Docker)
+
+**1. Build and run with Docker Compose:**
+```bash
+docker-compose up
+```
+
+**2. Open browser:**
+```
+http://localhost:8080/listings
+```
+
+**Benefits of Docker development:**
+- Identical to production environment
+- No "works on my machine" issues
+- Easy to share setup with team members
+- Includes MongoDB container locally
 
 ---
 
@@ -175,10 +272,8 @@ http://localhost:8080/listings
 | Method | Route | Purpose |
 |--------|-------|---------|
 | GET | `/listings` | View all listings |
-| GET | `/listings/new` | Show create listing form |
-| POST | `/listings` | Create new listing |
+| POST | `/listings` | Create listing |
 | GET | `/listings/:id` | View listing details |
-| GET | `/listings/:id/edit` | Show edit form |
 | PUT | `/listings/:id` | Update listing |
 | DELETE | `/listings/:id` | Delete listing |
 | POST | `/listings/:id/reviews` | Add review |
@@ -191,16 +286,7 @@ http://localhost:8080/listings
 
 ## 🗄️ Database Schema
 
-### User Schema
-```javascript
-{
-  username: String (unique, required),
-  email: String (unique, required),
-  password: String (hashed)
-}
-```
-
-### Listing Schema
+### Listing Model
 ```javascript
 {
   title: String,
@@ -209,17 +295,23 @@ http://localhost:8080/listings
   location: String,
   country: String,
   image: String (Cloudinary URL),
-  geometry: {
-    type: "Point",
-    coordinates: [longitude, latitude]
-  },
+  geometry: { type: "Point", coordinates: [lng, lat] },
   owner: ObjectId (User reference),
   reviews: [ObjectId] (Review references),
   createdAt: Date
 }
 ```
 
-### Review Schema
+### User Model
+```javascript
+{
+  username: String (unique),
+  email: String (unique),
+  password: String (hashed with bcryptjs)
+}
+```
+
+### Review Model
 ```javascript
 {
   comment: String,
@@ -232,27 +324,18 @@ http://localhost:8080/listings
 
 ---
 
-## 🚀 Deployment
+## 🚀 Production Deployment
 
-The application is deployed on **Render** with **MongoDB Atlas** for the database.
+### On Render
 
-### Deployment Steps:
+1. **Connect GitHub repo** to Render
+2. **Set environment variables** in Render dashboard
+3. **Configure deployment:**
+   - Build command: `npm install`
+   - Start command: `node app.js`
+4. **Auto-deploy** on every push to main via GitHub Actions
 
-1. **MongoDB Atlas Setup:**
-   - Create free M0 cluster at mongodb.com/atlas
-   - Get connection string
-   - Add IP whitelist (0.0.0.0/0 for Render)
-
-2. **Render Deployment:**
-   - Connect GitHub repo
-   - Add environment variables from `.env`
-   - Set build command: `npm install`
-   - Set start command: `node app.js`
-   - Deploy
-
-3. **Live URL:** [https://voyago-travel-6lqd.onrender.com](https://voyago-travel-6lqd.onrender.com)
-
-**Note:** Render free tier spins down after 15 minutes of inactivity. First load after sleep takes 30-60 seconds.
+**Note:** Render free tier spins down after 15 min inactivity (30-60 sec cold start).
 
 ---
 
@@ -260,53 +343,53 @@ The application is deployed on **Render** with **MongoDB Atlas** for the databas
 
 - Password hashing with bcryptjs
 - Session-based authentication
-- CSRF protection (can be added with csurf)
+- CSRF protection through secure sessions
 - Input validation with Joi
-- Authorization checks for owner-only operations
-- Secure environment variable handling
+- Authorization checks (owner-only operations)
+- Environment variable management for secrets
 - MongoDB injection prevention via Mongoose
 
 ---
 
 ## 📚 Learning Outcomes
 
-Through building Wanderlust, you'll learn:
+Building Wanderlust taught me:
 - Full-stack MERN-adjacent development with EJS
 - User authentication and authorization patterns
-- RESTful API design and routing
-- MongoDB schema design and relationships
-- Image upload and cloud storage integration
-- Maps integration in web applications
+- RESTful API design
+- MongoDB schema design
+- Third-party integrations (Cloudinary, Mapbox)
+- **Docker containerization for consistent environments**
+- **CI/CD automation with GitHub Actions**
 - MVC architecture and code organization
-- Deployment to production environments
-- Git version control and GitHub workflow
+- Production deployment practices
 
 ---
 
 ## 🔮 Future Enhancements
 
-- [ ] Advanced search and filtering (price range, ratings, amenities)
+- [ ] Advanced search and filtering
 - [ ] Booking system with date availability
-- [ ] Payment integration (Stripe/Razorpay)
-- [ ] User profile pages and dashboard
-- [ ] Email notifications for reviews
-- [ ] Admin dashboard for moderation
+- [ ] Payment integration (Stripe)
+- [ ] User profiles and dashboard
+- [ ] Email notifications
+- [ ] Admin moderation panel
 - [ ] Social features (favorites, follow users)
-- [ ] Rating and recommendation algorithm
+- [ ] Kubernetes orchestration for scalability
+- [ ] Comprehensive test coverage (Jest, Cypress)
 - [ ] API rate limiting and security headers
-- [ ] Mobile app version
 
 ---
 
 ## 🤝 Contributing
 
-This is a personal learning project. However, feel free to fork and modify!
+This is a personal learning project. Fork and modify as needed!
 
 ---
 
 ## 📄 License
 
-This project is open source and available under the MIT License.
+Open source — learning and development purposes.
 
 ---
 
@@ -321,4 +404,4 @@ This project is open source and available under the MIT License.
 
 ## 🎯 Key Takeaway
 
-Wanderlust demonstrates full-stack web development from concept to production deployment. It showcases real engineering practices including authentication, authorization, cloud storage, third-party integrations, and production deployment — exactly what companies like Google, Microsoft, and Stripe look for in engineering interns.
+Wanderlust demonstrates production-grade full-stack development from concept to containerized deployment with automated CI/CD. It showcases real engineering practices including authentication, authorization, cloud storage, third-party integrations, Docker containerization, and automated deployment pipelines — exactly what companies like Google, Microsoft, and Stripe expect from SWE interns.
